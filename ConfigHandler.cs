@@ -77,26 +77,7 @@ namespace TgwAssignment
                 ConfigFile configFile = new ConfigFile();
                 configFile.ConfigValues = new List<ConfigData>();
 
-                foreach (var line in lines)
-                {
-                    if (line.Contains("\t"))
-                    {
-                        var cleanline = line.Replace(":\t", "~").Replace("\t", string.Empty);
-
-                        var array = cleanline.Split("~");
-
-                        ConfigData configdata = new ConfigData();
-                        configdata.Key = array[0].ToLower();
-
-                        cleanline = cleanline.Replace("~", "//");
-                        array = cleanline.Split("//");
-
-                        configdata.Value = array[1];
-                        configdata.DataType = GetDataType(array[1]);
-                        configFile.ConfigValues.Add(configdata);
-
-                    }
-                }
+                LoadConfigValues(lines, configFile);
 
                 _configFiles.Add(configFile);
 
@@ -104,7 +85,31 @@ namespace TgwAssignment
             Console.WriteLine("-Config Files Loaded-\n");
 
             ConsoleMessage();
-            Console.ReadLine();
+        }
+
+        private static void LoadConfigValues(string[] lines, ConfigFile configFile)
+        {
+            foreach (var line in lines)
+            {
+                if (line.Contains("\t"))
+                {
+                    var updatedLine = line.Replace(":\t", "~").Replace("\t", string.Empty);
+
+                    var splittedLines = updatedLine.Split("~");
+
+                    ConfigData configdata = new ConfigData
+                    {
+                        Key = splittedLines[0].ToLower()
+                    };
+
+                    updatedLine = updatedLine.Replace("~", "//");
+                    splittedLines = updatedLine.Split("//");
+
+                    configdata.Value = splittedLines[1];
+                    configdata.DataType = GetDataType(splittedLines[1]);
+                    configFile.ConfigValues.Add(configdata);
+                }
+            }
         }
 
         private int ConsoleMessage()
