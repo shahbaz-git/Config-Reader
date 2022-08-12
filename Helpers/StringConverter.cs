@@ -23,6 +23,7 @@ namespace TgwAssignment
             stringConverter.AddConverter((string value, out long result) => long.TryParse(value, NumberStyles.Integer, stringConverter.Culture, out result));
             stringConverter.AddConverter((string value, out double result) => double.TryParse(value, NumberStyles.Number, stringConverter.Culture, out result));
             stringConverter.AddConverter((string value, out DateTime result) => DateTime.TryParse(value, stringConverter.Culture, DateTimeStyles.None, out result));
+            stringConverter.AddConverter((string value, out DateTime result) => DateTime.TryParseExact(value, "dd:MM:yyyy", stringConverter.Culture, DateTimeStyles.None, out result));
             return stringConverter;
         }
 
