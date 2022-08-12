@@ -8,6 +8,7 @@ namespace TgwAssignment
         static void Main(string[] args)
         {
             ConfigHandler configHandler = new();
+
             Console.ReadLine();
         }
     }
