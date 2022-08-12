@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TgwAssignment
+﻿namespace TgwAssignment
 {
+    using System;
+
     internal class Program
     {
         static void Main(string[] args)
