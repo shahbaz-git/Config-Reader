@@ -1,0 +1,55 @@
+
+
+Next to the possiblity of custom implementations to extend and customize our simulation models, we do have several hundred configuration parameters in our standard simulation products which allow us to easily customize our models.
+
+For this task, I've prepared two text files which should represent a simple example of a set of configuration parameters that should be loaded.
+
+
+Your task is to develop some code which is capable of:
+- loading configuration parameters 
+    - given a config-id and a datatype, it should return the loaded config-value
+	- it should also be possible to request all available config-values
+- "Overwriting" a config value by loading multiple config files should be possible. (See the detailled explanation on "layers" below.)
+- It should provide a simple way of accessing them at runtime from various classes which use those config parameters
+- And it should provide information if configuration parameters were set invalid (wrong datatype or invalid value)
+
+
+Please do also provide some thoughts (in textual form only) on how the following requirement could be implemented:
+- it should provide information if variability constraints are violated 
+	- Example: The parameter 'powerSupply' is required to be set to 'big' if the number of aisles in the sub-system config is >=5.
+	
+The software should have a small executable part which loads the given configuration parameters and logs them to the console to give an example on how it can be used.
+
+
+
+Additional Information:
+- Every config entry is represented by an id and a value which are separated by a ':' and 1-n tabs '\t' in the config files.
+Example: 
+configId: 		value
+
+- It should be possible to provide the system configuration in different layers.
+	This means:
+		- One base file contains the default values of all standard config parameters.
+		- Additional files can be loaded which overwrite the base config (new config values will be added; existing ones which were previously defined in a file loaded beforehand are overwritten by the new ones).
+		- The config value that should actually be used is always the one from the most specialized config file.
+		- If the most specialized config file does not contain a certain config parameter, it should be searched always on the next layer below this one.
+		- If a requested config value cannot be found in any of the config layers, the user should get some notification about it.
+	Example:
+		- C# Config Data Model (Requested Config-Ids):
+			o NumberOfSystems
+			o OrdersPerHour
+			o OrderLinesPerOrder
+			o ResultStartTime
+		- Global_Config_Standard.txt //base-layer (0) containing the default config
+			NumberOfSystems: 5
+			ResultStartTime: 01:00:00
+		- Global_Config_ProjectSpecific.txt //layer 1, containing the project specific config which may overwrite the default config
+			OrdersPerHour: 3000
+			ResultStartTime: 00:00:00
+		- Global_Config_ExperimentSpecifix.txt //layer 2, containing some experimental parameters to check/try new settings (which may overwrite the project & base config)
+			OrdersPerHour: 5000
+		Expected Result:
+			NumberOfSystems: 5 			//taken from layer 0
+			OrdersPerHour: 5000 		//taken from layer 2
+			OrderLinesPerOrder: Error	//could not be found in layer 2,1,0. => No value available to be set. => Error
+			ResultStartTime: 00:00:00	//taken from layer 1
