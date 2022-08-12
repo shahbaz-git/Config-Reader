@@ -1,6 +1,7 @@
-﻿namespace TgwAssignment
+﻿using System;
+
+namespace TgwAssignment
 {
-    using System;
 
     internal class Program
     {
